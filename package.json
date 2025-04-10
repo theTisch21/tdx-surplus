@@ -1,4 +1,11 @@
 {
-  "name": "TDX API testing",
-  "packageManager": "yarn@4.7.0"
+  "name": "sandbox",
+  "packageManager": "yarn@4.7.0",
+  "devDependencies": {
+    "@types/node": "^22.13.11"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "yarn build; node ./main.js"
+  }
 }
