@@ -1,9 +1,78 @@
 //run with yarn start
 // Paste your API key here
-const apiKey = ""
+const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRpc2NoYWVzQGVyYXUuZWR1IiwidGR4X2VudGl0eSI6IjIiLCJ0ZHhfcGFydGl0aW9uIjoiMTgiLCJuYmYiOjE3NDQ1MTY0MzAsImV4cCI6MTc0NDYwMjgzMCwiaWF0IjoxNzQ0NTE2NDMwLCJpc3MiOiJURCIsImF1ZCI6Imh0dHBzOi8vd3d3LnRlYW1keW5hbWl4LmNvbS8ifQ.YbnPwRFa7luwTBG8Ay-oA2inL25Rx59mWDUrDUtU9cg"
 
 const headers = {Authorization: "Bearer " + apiKey, "Content-Type": "application/json"}
-
+type Asset = {
+    ID: number;
+    AppID: number;
+    AppName: string;
+    FormID: number;
+    FormName: string;
+    ProductModelID: number;
+    ProductModelName: string;
+    ManufacturerID: number;
+    ManufacturerName: string;
+    SupplierID: number;
+    SupplierName: string;
+    StatusID: number;
+    StatusName: string;
+    LocationID: number;
+    LocationName: string;
+    LocationRoomID: number;
+    LocationRoomName: string;
+    Tag: string;
+    SerialNumber: string;
+    Name: string;
+    PurchaseCost: number;
+    AcquisitionDate: string; // ISO date string
+    ExpectedReplacementDate: string; // ISO date string
+    RequestingCustomerID: string;
+    RequestingCustomerName: string;
+    RequestingDepartmentID: number;
+    RequestingDepartmentName: string;
+    OwningCustomerID: string;
+    OwningCustomerName: string;
+    OwningDepartmentID: number;
+    OwningDepartmentName: string;
+    ParentID: number;
+    ParentSerialNumber: string;
+    ParentName: string | null;
+    ParentTag: string | null;
+    MaintenanceScheduleID: number;
+    MaintenanceScheduleName: string;
+    ConfigurationItemID: number;
+    CreatedDate: string; // ISO date string
+    CreatedUid: string;
+    CreatedFullName: string;
+    ModifiedDate: string; // ISO date string
+    ModifiedUid: string;
+    ModifiedFullName: string;
+    ExternalID: string;
+    ExternalSourceID: number;
+    ExternalSourceName: string;
+    Attributes: Attribute[];
+    Attachments: any[]; // Adjust type if needed
+    Uri: string;
+  };
+  
+  type Attribute = {
+    ID: number;
+    Name: string;
+    Order: number;
+    Description: string;
+    SectionID: number;
+    SectionName: string | null;
+    FieldType: string;
+    DataType: string;
+    Choices: any[]; // Adjust type if needed
+    IsRequired: boolean;
+    IsUpdatable: boolean;
+    Value: string;
+    ValueText: string;
+    ChoicesText: string;
+    AssociatedItemIDs: any[]; // Adjust type if needed
+  };
 import ReadLine from "node:readline"
 const rl = ReadLine.createInterface({
     input: process.stdin,
@@ -42,8 +111,7 @@ async function go() {
             })})
             const assetID = (await (await r).json())[0].ID
             const r2 = fetch(`https://erau.teamdynamix.com/TDWebApi/api/29/assets/${assetID}`, {headers: headers})
-            let asset = await (await r2).json()
-            
+            let asset: Asset = await (await r2).json() as Asset
             //Log name for AD deletion
             let name = asset.Name
             console.log(`\nName: ${name} ID: ${asset.ID} Serial: ${asset.SerialNumber}\n`)
